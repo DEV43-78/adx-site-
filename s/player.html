@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎥 Watch Video | TeraboxLinke</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XYQW7CK6QH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XYQW7CK6QH');
+  </script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      cursor: pointer;
+    }
+    nav {
+      background: #007bff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .player-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 10px;
+    }
+    .player-box {
+      width: 300px;
+      height: 200px;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,123,255,0.5);
+      border: 2px solid rgba(0,123,255,0.7);
+      background: #000;
+    }
+    .player-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(8px);
+      transform: scale(1.1);
+    }
+    .overlay-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">TeraboxLinke</div>
+    <div class="short-link" id="shortLinkDisplay"></div>
+  </nav>
+
+  <!-- Player UI -->
+  <div class="player-container">
+    <div class="player-box" id="playerBox">
+      <img src="img/a1.jpg" alt="Video Thumbnail" />
+      <div class="overlay-text">▶️ View in App</div>
+    </div>
+  </div>
+
+  <p style="text-align:center; font-size: 14px; color: #666; margin-top: -20px;">
+  ⚠️ 1st Click = Ad 1, 2nd = Ad 2, 3rd = Video. Pattern repeats. पहली क्लिक Ad 1, दूसरी Ad 2, तीसरी Video ।
+  </p>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 TeraboxLinke | <a href="#" style="color:#007bff;text-decoration:none;">Privacy Policy</a>
+  </footer>
+
+  <!-- Firebase Auth Check & Security -->
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
+        authDomain: "link-shortner-6a2c1.firebaseapp.com",
+        projectId: "link-shortner-6a2c1",
+        storageBucket: "link-shortner-6a2c1.appspot.com",
+        messagingSenderId: "702481354050",
+        appId: "1:702481354050:web:797dce2f2a1302f2590cdb",
+        measurementId: "G-N4J4YQ125B"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let pathSegments = window.location.pathname.split('/').filter(Boolean);
+    let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
+
+    if (!videoID) {
+      document.body.innerHTML = "<h2 style='color:red;text-align:center; font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
+    } else {
+      const originalLink = `https://terasharelink.com/s/${videoID}`;
+      const shortLink = `https://www.staela.net/s/${videoID}`;
+      const adLink1 = "https://phoampor.top/4/9199335";
+      const adLink2 = "https://gadiz.in/post/Auraa"; // Second ad link
+      let clickCount = 0;
+
+      document.getElementById('shortLinkDisplay').innerHTML = `<a href="${shortLink}" style="color:white;text-decoration:none;">${shortLink}</a>`;
+
+      document.body.addEventListener('click', () => {
+        clickCount++;
+        const modClick = (clickCount - 1) % 3;
+        if (modClick === 0) {
+          window.open(adLink1, "_blank");
+        } else if (modClick === 1) {
+          window.open(adLink2, "_blank");
+        } else {
+          window.location.href = originalLink;
+        }
+      });
+
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          console.log("User is authenticated");
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
