@@ -1,3 +1,4 @@
+<!-- player.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,117 +19,11 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
-  <style>
-    :root {
-      --primary: #00bcd4;
-      --dark-bg: #121212;
-      --light-text: #e0e0e0;
-      --glass: rgba(255, 255, 255, 0.08);
-    }
-
-    body {
-      margin: 0;
-      background: var(--dark-bg);
-      font-family: 'Inter', sans-serif;
-      color: var(--light-text);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      cursor: pointer;
-    }
-
-    nav {
-      background: rgba(0, 188, 212, 0.1);
-      backdrop-filter: blur(12px);
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--light-text);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .logo {
-      font-weight: 600;
-      font-size: 20px;
-    }
-
-    .player-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 16px;
-    }
-
-    .player-box {
-      width: 320px;
-      height: 200px;
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 0 30px rgba(0,188,212,0.3);
-      border: 2px solid rgba(0,188,212,0.5);
-      background: #000;
-    }
-
-    .player-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: blur(8px);
-      transform: scale(1.1);
-    }
-
-    .overlay-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--light-text);
-      background: rgba(0, 0, 0, 0.6);
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 16px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-      text-align: center;
-    }
-
-    .open-btn {
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #00bcd4, #009688);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
-    }
-
-    p {
-      text-align: center;
-      font-size: 14px;
-      color: #aaa;
-      margin-top: -20px;
-    }
-
-    footer {
-      margin-top: auto;
-      text-align: center;
-      padding: 12px;
-      font-size: 13px;
-      background: rgba(255, 255, 255, 0.02);
-      color: #888;
-      backdrop-filter: blur(6px);
-    }
-
-    #shortLinkDisplay {
-      display: none;
-    }
-  </style>
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
@@ -153,64 +48,7 @@
     © 2025 TeraboxLinke | <a href="#" style="color:#00bcd4;text-decoration:none;">Privacy Policy</a>
   </footer>
 
-  <!-- Firebase Auth Check & Countdown Redirect -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
-      authDomain: "link-shortner-6a2c1.firebaseapp.com",
-      projectId: "link-shortner-6a2c1",
-      storageBucket: "link-shortner-6a2c1.appspot.com",
-      messagingSenderId: "702481354050",
-      appId: "1:702481354050:web:797dce2f2a1302f2590cdb",
-      measurementId: "G-N4J4YQ125B"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    let pathSegments = window.location.pathname.split('/').filter(Boolean);
-    let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
-
-    if (!videoID) {
-      document.body.innerHTML = "<h2 style='color:red;text-align:center; font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
-    } else {
-      const originalLink = `https://terasharelink.com/s/${videoID}`;
-      const shortLink = `https://www.staela.net/s/${videoID}`;
-      document.getElementById('shortLinkDisplay').innerHTML = `<a href="${shortLink}" style="color:white;text-decoration:none;">${shortLink}</a>`;
-
-      const playerBox = document.getElementById('playerBox');
-      const overlay = document.getElementById('overlayText');
-      let started = false;
-
-      playerBox.addEventListener('click', () => {
-        if (started) return;
-        started = true;
-
-        let countdown = 10;
-        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
-
-        const interval = setInterval(() => {
-          countdown--;
-          overlay.textContent = `⏳ Please wait ${countdown} sec...`;
-
-          if (countdown === 0) {
-            clearInterval(interval);
-            overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
-
-            document.getElementById('openBtn').addEventListener('click', () => {
-              window.location.href = originalLink;
-            });
-          }
-        }, 1000);
-      });
-
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          console.log("User is authenticated");
-        }
-      });
-    }
-  </script>
-
+  <!-- Player Script -->
+  <script src="player.js"></script>
 </body>
 </html>
