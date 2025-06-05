@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/:linkid", "destination": "/player.html" }
+    { "source": "/s/:linkid", "destination": "/s/player.html" }
   ]
 }
