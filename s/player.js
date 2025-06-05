@@ -1,4 +1,4 @@
-// player.js
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
   authDomain: "link-shortner-6a2c1.firebaseapp.com",
@@ -12,6 +12,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
+// Get video ID from URL
 let pathSegments = window.location.pathname.split('/').filter(Boolean);
 let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
 
@@ -26,27 +27,36 @@ if (!videoID) {
   const overlay = document.getElementById('overlayText');
   let started = false;
 
-  playerBox.addEventListener('click', () => {
-    if (started) return;
-    started = true;
+  const alreadyVisited = localStorage.getItem(`visited_${videoID}`);
 
-    let countdown = 10;
-    overlay.textContent = `⏳ Please wait ${countdown} sec...`;
+  if (alreadyVisited === 'true') {
+    overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+    document.getElementById('openBtn').addEventListener('click', () => {
+      window.location.href = originalLink;
+    });
+  } else {
+    playerBox.addEventListener('click', () => {
+      if (started) return;
+      started = true;
 
-    const interval = setInterval(() => {
-      countdown--;
+      let countdown = 10;
       overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-      if (countdown === 0) {
-        clearInterval(interval);
-        overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+      const interval = setInterval(() => {
+        countdown--;
+        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-        document.getElementById('openBtn').addEventListener('click', () => {
-          window.location.href = originalLink;
-        });
-      }
-    }, 1000);
-  });
+        if (countdown === 0) {
+          clearInterval(interval);
+          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+          document.getElementById('openBtn').addEventListener('click', () => {
+            localStorage.setItem(`visited_${videoID}`, 'true'); // mark visited
+            window.location.href = originalLink;
+          });
+        }
+      }, 1000);
+    });
+  }
 
   auth.onAuthStateChanged((user) => {
     if (user) {
