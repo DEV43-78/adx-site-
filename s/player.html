@@ -18,41 +18,61 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
   <style>
+    :root {
+      --primary: #00bcd4;
+      --dark-bg: #121212;
+      --light-text: #e0e0e0;
+      --glass: rgba(255, 255, 255, 0.08);
+    }
+
     body {
       margin: 0;
-      background: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--dark-bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--light-text);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       cursor: pointer;
     }
+
     nav {
-      background: #007bff;
-      padding: 10px 20px;
+      background: rgba(0, 188, 212, 0.1);
+      backdrop-filter: blur(12px);
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      color: var(--light-text);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
+
+    .logo {
+      font-weight: 600;
+      font-size: 20px;
+    }
+
     .player-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 30px 10px;
+      padding: 40px 16px;
     }
+
     .player-box {
-      width: 300px;
+      width: 320px;
       height: 200px;
-      border-radius: 15px;
+      border-radius: 20px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 0 20px rgba(0,123,255,0.5);
-      border: 2px solid rgba(0,123,255,0.7);
+      box-shadow: 0 0 30px rgba(0,188,212,0.3);
+      border: 2px solid rgba(0,188,212,0.5);
       background: #000;
     }
+
     .player-box img {
       width: 100%;
       height: 100%;
@@ -60,27 +80,51 @@
       filter: blur(8px);
       transform: scale(1.1);
     }
+
     .overlay-text {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: white;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 8px 16px;
-      border-radius: 8px;
+      color: var(--light-text);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 12px 20px;
+      border-radius: 10px;
       font-weight: bold;
       font-size: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+      text-align: center;
     }
+
+    .open-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #00bcd4, #009688);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
+    }
+
+    p {
+      text-align: center;
+      font-size: 14px;
+      color: #aaa;
+      margin-top: -20px;
+    }
+
     footer {
       margin-top: auto;
       text-align: center;
-      padding: 10px;
-      font-size: 12px;
+      padding: 12px;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.02);
       color: #888;
+      backdrop-filter: blur(6px);
     }
-    /* Hide short link if not needed */
+
     #shortLinkDisplay {
       display: none;
     }
@@ -98,20 +142,18 @@
   <div class="player-container">
     <div class="player-box" id="playerBox">
       <img src="img/a1.jpg" alt="Video Thumbnail" />
-      <div class="overlay-text">▶️ Click to Continue</div>
+      <div class="overlay-text" id="overlayText">▶️ Click to Continue</div>
     </div>
   </div>
 
-  <p style="text-align:center; font-size: 14px; color: #666; margin-top: -20px;">
-    ⚠️ Tap anywhere to play the video from our secure server.
-  </p>
+  <p>⚠️ Tap the player to start countdown, then open in app.</p>
 
   <!-- Footer -->
   <footer>
-    © 2025 TeraboxLinke | <a href="#" style="color:#007bff;text-decoration:none;">Privacy Policy</a>
+    © 2025 TeraboxLinke | <a href="#" style="color:#00bcd4;text-decoration:none;">Privacy Policy</a>
   </footer>
 
-  <!-- Firebase Auth Check & Redirect -->
+  <!-- Firebase Auth Check & Countdown Redirect -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
@@ -134,12 +176,32 @@
     } else {
       const originalLink = `https://terasharelink.com/s/${videoID}`;
       const shortLink = `https://www.staela.net/s/${videoID}`;
-
-      // Optional display (currently hidden via CSS)
       document.getElementById('shortLinkDisplay').innerHTML = `<a href="${shortLink}" style="color:white;text-decoration:none;">${shortLink}</a>`;
 
-      document.body.addEventListener('click', () => {
-        window.location.href = originalLink;
+      const playerBox = document.getElementById('playerBox');
+      const overlay = document.getElementById('overlayText');
+      let started = false;
+
+      playerBox.addEventListener('click', () => {
+        if (started) return;
+        started = true;
+
+        let countdown = 10;
+        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
+
+        const interval = setInterval(() => {
+          countdown--;
+          overlay.textContent = `⏳ Please wait ${countdown} sec...`;
+
+          if (countdown === 0) {
+            clearInterval(interval);
+            overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+
+            document.getElementById('openBtn').addEventListener('click', () => {
+              window.location.href = originalLink;
+            });
+          }
+        }, 1000);
       });
 
       auth.onAuthStateChanged((user) => {
