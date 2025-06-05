@@ -25,38 +25,32 @@ if (!videoID) {
 
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
-  let started = false;
+  let inProgress = false;
 
-  const alreadyVisited = localStorage.getItem(`visited_${videoID}`);
+  const startCountdown = () => {
+    if (inProgress) return;
+    inProgress = true;
 
-  if (alreadyVisited === 'true') {
-    overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
-    document.getElementById('openBtn').addEventListener('click', () => {
-      window.location.href = originalLink;
-    });
-  } else {
-    playerBox.addEventListener('click', () => {
-      if (started) return;
-      started = true;
+    let countdown = 10;
+    overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-      let countdown = 10;
+    const interval = setInterval(() => {
+      countdown--;
       overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-      const interval = setInterval(() => {
-        countdown--;
-        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
+      if (countdown === 0) {
+        clearInterval(interval);
+        overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+        document.getElementById('openBtn').addEventListener('click', () => {
+          inProgress = false; // Reset so user can re-click
+          overlay.textContent = "▶️ Click to Continue"; // Reset overlay text
+          window.location.href = originalLink;
+        });
+      }
+    }, 1000);
+  };
 
-        if (countdown === 0) {
-          clearInterval(interval);
-          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
-          document.getElementById('openBtn').addEventListener('click', () => {
-            localStorage.setItem(`visited_${videoID}`, 'true'); // mark visited
-            window.location.href = originalLink;
-          });
-        }
-      }, 1000);
-    });
-  }
+  playerBox.addEventListener('click', startCountdown);
 
   auth.onAuthStateChanged((user) => {
     if (user) {
