@@ -1,4 +1,3 @@
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
   authDomain: "link-shortner-6a2c1.firebaseapp.com",
@@ -12,7 +11,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// Get video ID from URL
 let pathSegments = window.location.pathname.split('/').filter(Boolean);
 let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
 
@@ -25,32 +23,37 @@ if (!videoID) {
 
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
-  let inProgress = false;
+  let started = false;
+  let countdown = 10;
+  let intervalId = null;
 
-  const startCountdown = () => {
-    if (inProgress) return;
-    inProgress = true;
-
-    let countdown = 10;
+  function startTimer() {
     overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-    const interval = setInterval(() => {
-      countdown--;
-      overlay.textContent = `⏳ Please wait ${countdown} sec...`;
+    intervalId = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        countdown--;
+        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-      if (countdown === 0) {
-        clearInterval(interval);
-        overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
-        document.getElementById('openBtn').addEventListener('click', () => {
-          inProgress = false; // Reset so user can re-click
-          overlay.textContent = "▶️ Click to Continue"; // Reset overlay text
-          window.location.href = originalLink;
-        });
+        if (countdown <= 0) {
+          clearInterval(intervalId);
+          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+          document.getElementById('openBtn').addEventListener('click', () => {
+            overlay.textContent = "▶️ Click to Continue";
+            countdown = 10;
+            started = false;
+            window.location.href = originalLink;
+          });
+        }
       }
     }, 1000);
-  };
+  }
 
-  playerBox.addEventListener('click', startCountdown);
+  playerBox.addEventListener('click', () => {
+    if (started) return;
+    started = true;
+    startTimer();
+  });
 
   auth.onAuthStateChanged((user) => {
     if (user) {
