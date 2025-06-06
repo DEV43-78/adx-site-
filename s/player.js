@@ -17,7 +17,7 @@ let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null
 if (!videoID) {
   document.body.innerHTML = "<h2 style='color:red;text-align:center; font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
 } else {
-  const originalLink = `https://terasharelink.com/s/${videoID}`;
+  const originalLink = `https://obqj2.com/4/9257743/s/${videoID}`;
   const shortLink = `https://www.staela.net/s/${videoID}`;
   document.getElementById('shortLinkDisplay').innerHTML = `<a href="${shortLink}" style="color:white;text-decoration:none;">${shortLink}</a>`;
 
