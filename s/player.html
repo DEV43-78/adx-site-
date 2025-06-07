@@ -1,214 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎥 Watch Video | with app</title>
+// 1. Firebase Configuration & Initialization
+const firebaseConfig = {
+  apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
+  authDomain: "link-shortner-6a2c1.firebaseapp.com",
+  projectId: "link-shortner-6a2c1",
+  storageBucket: "link-shortner-6a2c1.appspot.com",
+  messagingSenderId: "702481354050",
+  appId: "1:702481354050:web:797dce2f2a1302f2590cdb",
+  measurementId: "G-N4J4YQ125B"
+};
 
-  <!-- ✅ AdX GPT Script (only once) -->
-  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" crossorigin="anonymous"></script>
-  <script>
-    window.googletag = window.googletag || {cmd: []};
-    googletag.cmd.push(function() {
-      // Ad Slot 1
-      googletag.defineSlot('/23297333544/player-adx', [[300, 250], [336, 280], [250, 250], 'fluid'], 'div-gpt-ad-1749264287831-0').addService(googletag.pubads());
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-      // Ad Slot 2
-      googletag.defineSlot('/23297333544/player-adx', [[336, 280], 'fluid', [250, 250], [300, 250]], 'div-gpt-ad-1749227428362-0').addService(googletag.pubads());
+// 2. Extract Video ID from URL
+let pathSegments = window.location.pathname.split('/').filter(Boolean);
+let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
 
-      googletag.enableServices();
-    });
-  </script>
-  
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2ESXR8S6B3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+// 3. Validate and Proceed
+if (!videoID) {
+  document.body.innerHTML = "<h2 style='color:red;text-align:center; font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
+} else {
+  const originalLink = `https://teraboxlinke.com/s/${videoID}`;
 
-  gtag('config', 'G-2ESXR8S6B3');
-</script>
-  
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  // 4. DOM Elements
+  const playerBox = document.getElementById('playerBox');
+  const overlay = document.getElementById('overlayText');
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  // 5. Countdown Logic
+  let started = false;
+  let countdown = 10;
+  let intervalId = null;
+  let refreshIntervalId = null;
 
-  <style>
-    :root {
-      --primary: #00bcd4;
-      --dark-bg: #121212;
-      --light-text: #e0e0e0;
-      --glass: rgba(255, 255, 255, 0.08);
-    }
+  function startTimer() {
+    overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-    body {
-      margin: 0;
-      background: var(--dark-bg);
-      font-family: 'Inter', sans-serif;
-      color: var(--light-text);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      cursor: pointer;
-    }
+    intervalId = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        countdown--;
+        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-    nav {
-      background: rgba(0, 188, 212, 0.1);
-      backdrop-filter: blur(12px);
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--light-text);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
+        if (countdown <= 0) {
+          clearInterval(intervalId);
+          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
 
-    .logo {
-      font-weight: 600;
-      font-size: 20px;
-    }
+          document.getElementById('openBtn').addEventListener('click', () => {
+            overlay.textContent = "▶️ Redirecting...";
+            clearInterval(refreshIntervalId); // Stop ad refresh loop
+            window.location.href = originalLink;
+          });
+        }
+      }
+    }, 1000);
+  }
 
-    .player-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 16px;
-      gap: 24px;
-    }
-
-    .player-box {
-      width: 320px;
-      height: 200px;
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 0 30px rgba(0,188,212,0.3);
-      border: 2px solid rgba(0,188,212,0.5);
-      background: #000;
-    }
-
-    .player-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: blur(8px);
-      transform: scale(1.1);
-    }
-
-    .overlay-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--light-text);
-      background: rgba(0, 0, 0, 0.6);
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 16px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-      text-align: center;
-    }
-
-    .open-btn {
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #00bcd4, #009688);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
-    }
-
-    p {
-      text-align: center;
-      font-size: 14px;
-      color: #aaa;
-      margin-top: -20px;
-    }
-
-    footer {
-      margin-top: auto;
-      text-align: center;
-      padding: 12px;
-      font-size: 13px;
-      background: rgba(255, 255, 255, 0.02);
-      color: #888;
-      backdrop-filter: blur(6px);
-    }
-
-    #shortLinkDisplay {
-      display: none !important;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Navbar -->
-  <nav>
-    <div class="logo">🎥 Watch Video |</div>
-    <div class="short-link" id="shortLinkDisplay"></div>
-  </nav>
-
-  <!-- Ad 1 -->
-  <div id='div-gpt-ad-1749264287831-0' style='min-width: 250px; min-height: 250px;'>
-    <script>
-      googletag.cmd.push(function() {
-        googletag.display('div-gpt-ad-1749264287831-0');
+  // 6. Refresh AdX Ads
+  function refreshAds() {
+    if (window.googletag && googletag.pubads) {
+      googletag.cmd.push(function () {
+        googletag.pubads().refresh();
       });
-    </script>
-  </div>
+    }
+  }
 
-  <!-- Player UI -->
-  <div class="player-container">
-    <div class="player-box" id="playerBox">
-      <img src="img/a1.jpg" alt="Video Thumbnail" />
-      <div class="overlay-text" id="overlayText">▶️ Click to Continue</div>
-    </div>
+  // 7. Start 30-Second Auto Refresh Loop
+  function startAdRefreshLoop() {
+    refreshIntervalId = setInterval(() => {
+      refreshAds();
+      console.log("🔄 AdX ads refreshed every 30 sec");
+    }, 30000); // 30 seconds
+  }
 
-    <!-- Ad 2 -->
-    <div id='div-gpt-ad-1749227428362-0' style='min-width: 250px; min-height: 250px;'>
-      <script>
-        googletag.cmd.push(function() {
-          googletag.display('div-gpt-ad-1749227428362-0');
-        });
-      </script>
-    </div>
-  </div>
+  // 8. Player Box Click Event
+  playerBox.addEventListener('click', () => {
+    if (started) return;
+    started = true;
+    startTimer();
+    refreshAds();         // Initial refresh
+    startAdRefreshLoop(); // Start loop
+  });
 
-  <!-- News Article -->
-  <section style="padding: 24px; max-width: 900px; margin: auto; font-size: 15px; line-height: 1.6; color: #ccc;">
-    <h2 style="color: #00bcd4;">🔹 भारत में 5G तकनीक का तेजी से विस्तार, यूजर्स को मिल रहा हाई स्पीड इंटरनेट</h2>
-    <p>
-      भारत में 5G तकनीक के लॉंच के बाद से देशभर में डिजिटल क्रांति की रफ्तार तेज़ हो गई है।
-      टेलीकॉम कंपनियाँ जैसे Jio और Airtel ने देश के कई हिस्सों में 5G नेटवर्क शुरू कर दिया है,
-      जिससे यूजर्स को अब 1Gbps तक की स्पीड मिल रही है।
-    </p>
-    <p>
-      सरकार का लक्ष्य है कि 2025 तक देश के 90% हिस्सों में 5G नेटवर्क उपलब्ध हो।
-      इसके लिए दूरसंचार विभाग (DoT) तेजी से स्पेक्ट्रम और इन्फ्रास्ट्रक्चर तैयार करने पर काम कर रहा है।
-    </p>
-    <p>
-      रिपोर्ट्स के मुताबिक 5G तकनीक से भारतीय अर्थनीति में सालाना 1.2 लाख करोड़ रुपये तक का योगदान होने की आशा है।
-      इससे डिजिटल सेवाओं का दायरा बड़ेगा, और युवाओं को नई तकनीकी नौकरियों के अवसर भी प्राप्त होंगे।
-    </p>
-  </section>
+  // 9. Refresh ads on page restore (back/forward)
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted || window.performance.navigation.type === 2) {
+      refreshAds();
+    }
+  });
 
-  <p>⚠️ Tap the player to start countdown, then open in app.</p>
-
-  <!-- Footer -->
-  <footer>
-    © 2025 TeraboxLinke | <a href="#" style="color:#00bcd4;text-decoration:none;">Privacy Policy</a>
-  </footer>
-
-  <!-- Player Logic -->
-  <script src="player.js"></script>
-</body>
-</html>
+  // 10. Firebase Auth State Check
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      console.log("✅ User is authenticated");
+    }
+  });
+}
