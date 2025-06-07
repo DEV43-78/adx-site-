@@ -1,87 +1,79 @@
-// 1. Firebase Configuration & Initialization
-const firebaseConfig = {
-  apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
-  authDomain: "link-shortner-6a2c1.firebaseapp.com",
-  projectId: "link-shortner-6a2c1",
-  storageBucket: "link-shortner-6a2c1.appspot.com",
-  messagingSenderId: "702481354050",
-  appId: "1:702481354050:web:797dce2f2a1302f2590cdb",
-  measurementId: "G-N4J4YQ125B"
-};
+<script>
+  // Firebase config & init (same as your current)
+  const firebaseConfig = {
+    apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
+    authDomain: "link-shortner-6a2c1.firebaseapp.com",
+    projectId: "link-shortner-6a2c1",
+    storageBucket: "link-shortner-6a2c1.appspot.com",
+    messagingSenderId: "702481354050",
+    appId: "1:702481354050:web:797dce2f2a1302f2590cdb",
+    measurementId: "G-N4J4YQ125B"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+  // Get videoID from URL
+  let pathSegments = window.location.pathname.split('/').filter(Boolean);
+  let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
 
-// 2. Extract Video ID from URL
-let pathSegments = window.location.pathname.split('/').filter(Boolean);
-let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
+  if (!videoID) {
+    document.body.innerHTML = "<h2 style='color:red;text-align:center;font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
+  } else {
+    const originalLink = `https://terasharelink.com/s/${videoID}`;
+    const playerBox = document.getElementById('playerBox');
+    const overlay = document.getElementById('overlayText');
 
-// 3. Validate and Proceed
-if (!videoID) {
-  document.body.innerHTML = "<h2 style='color:red;text-align:center; font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
-} else {
-  const originalLink = `https://terasharelink.com/s/${videoID}`;
+    let state = 0; // 0 = first click, 1 = countdown, 2 = ready to redirect
+    let countdown = 10;
+    let intervalId = null;
 
-  // 4. DOM Elements
-  const playerBox = document.getElementById('playerBox');
-  const overlay = document.getElementById('overlayText');
+    function startCountdown() {
+      overlay.textContent = `⏳ Please wait ${countdown} sec...`;
 
-  // 5. Countdown Logic
-  let started = false;
-  let countdown = 10;
-  let intervalId = null;
-
-  function startTimer() {
-    overlay.textContent = `⏳ Please wait ${countdown} sec...`;
-
-    intervalId = setInterval(() => {
-      if (document.visibilityState === "visible") {
-        countdown--;
-        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
-
-        if (countdown <= 0) {
-          clearInterval(intervalId);
-          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
-
-          document.getElementById('openBtn').addEventListener('click', () => {
-            overlay.textContent = "▶️ Click to Continue";
-            countdown = 10;
-            started = false;
-            window.location.href = originalLink;
-          });
+      intervalId = setInterval(() => {
+        if (document.visibilityState === "visible") {
+          countdown--;
+          overlay.textContent = `⏳ Please wait ${countdown} sec...`;
+          if (countdown <= 0) {
+            clearInterval(intervalId);
+            overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+            document.getElementById("openBtn").addEventListener("click", () => {
+              window.location.href = originalLink;
+            });
+            state = 2;
+          }
         }
+      }, 1000);
+    }
+
+    function refreshAds() {
+      if (window.googletag && googletag.pubads) {
+        googletag.cmd.push(function () {
+          googletag.pubads().refresh();
+        });
       }
-    }, 1000);
+    }
+
+    playerBox.addEventListener('click', () => {
+      if (state === 0) {
+        window.open("https://facebook.com", "_blank");
+        state = 1;
+        return;
+      }
+      if (state === 1) {
+        startCountdown();
+        refreshAds();
+      }
+    });
+
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted || window.performance.navigation.type === 2) {
+        refreshAds();
+      }
+    });
+
+    auth.onAuthStateChanged((user) => {
+      if (user) console.log("✅ User is authenticated");
+    });
   }
-
-  // 6. Refresh AdX Ads
-  function refreshAds() {
-    if (window.googletag && googletag.pubads) {
-      googletag.cmd.push(function () {
-        googletag.pubads().refresh();
-      });
-    }
-  }
-
-  // 7. Player Box Click Event
-  playerBox.addEventListener('click', () => {
-    if (started) return;
-    started = true;
-    startTimer();
-    refreshAds(); // 🔁 refresh ads on click
-  });
-
-  // 8. Re-refresh ads on back/forward navigation
-  window.addEventListener("pageshow", function (event) {
-    if (event.persisted || window.performance.navigation.type === 2) {
-      refreshAds(); // 🔁 refresh ads if page restored from cache
-    }
-  });
-
-  // 9. Firebase Auth Listener
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      console.log("✅ User is authenticated");
-    }
-  });
-}
+</script>
