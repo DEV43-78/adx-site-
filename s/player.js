@@ -24,7 +24,7 @@ if (!videoID) {
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
 
-  let state = 0; // 0 = first click (facebook), 1 = countdown, 2 = ready
+  let state = 0; // 0 = first click (open ad), 1 = countdown, 2 = ready
   let countdown = 10;
   let intervalId = null;
 
@@ -56,7 +56,7 @@ if (!videoID) {
 
   playerBox.addEventListener('click', () => {
     if (state === 0) {
-      window.location.href = "https://obqj2.com/4/9257743"; // Same tab
+      window.open("https://obqj2.com/4/9257743", "_blank"); // Open ad in new tab
       state = 1;
       return;
     }
