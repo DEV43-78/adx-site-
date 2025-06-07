@@ -25,7 +25,7 @@ if (!videoID) {
   const overlay = document.getElementById('overlayText');
 
   let state = 0; // 0 = first click (open ad), 1 = countdown, 2 = ready
-  let countdown = 10;
+  let countdown = 6;
   let intervalId = null;
 
   function startCountdown() {
