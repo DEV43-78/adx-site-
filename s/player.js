@@ -21,20 +21,12 @@ if (!videoID) {
   document.body.innerHTML = "<h2 style='color:red;text-align:center; font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
 } else {
   const originalLink = `teraboxlinke/s/${videoID}`;
-  const shortLink = `https://www.staela.net/s/${videoID}`;
 
-  // 4. Display Short Link
-  const linkDisplay = document.getElementById('shortLinkDisplay');
-  if (linkDisplay) {
-    linkDisplay.innerHTML = `<a href="${shortLink}" style="color:white;text-decoration:none;">${shortLink}</a>`;
-    linkDisplay.style.display = "block";
-  }
-
-  // 5. DOM Elements
+  // 4. DOM Elements
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
 
-  // 6. Countdown Logic
+  // 5. Countdown Logic
   let started = false;
   let countdown = 10;
   let intervalId = null;
@@ -62,7 +54,7 @@ if (!videoID) {
     }, 1000);
   }
 
-  // 7. Refresh AdX Ads
+  // 6. Refresh AdX Ads
   function refreshAds() {
     if (window.googletag && googletag.pubads) {
       googletag.cmd.push(function () {
@@ -71,7 +63,7 @@ if (!videoID) {
     }
   }
 
-  // 8. Player Box Click Event
+  // 7. Player Box Click Event
   playerBox.addEventListener('click', () => {
     if (started) return;
     started = true;
@@ -79,14 +71,14 @@ if (!videoID) {
     refreshAds(); // 🔁 refresh ads on click
   });
 
-  // 9. Re-refresh ads on back/forward navigation
+  // 8. Re-refresh ads on back/forward navigation
   window.addEventListener("pageshow", function (event) {
     if (event.persisted || window.performance.navigation.type === 2) {
       refreshAds(); // 🔁 refresh ads if page restored from cache
     }
   });
 
-  // 10. Firebase Auth Listener
+  // 9. Firebase Auth Listener
   auth.onAuthStateChanged((user) => {
     if (user) {
       console.log("✅ User is authenticated");
