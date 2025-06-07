@@ -20,7 +20,7 @@ let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null
 if (!videoID) {
   document.body.innerHTML = "<h2 style='color:red;text-align:center;font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
 } else {
-  const originalLink = `https://1024terabox.com/s/${videoID}`;
+  const originalLink = `https://terasharelink.com/s/${videoID}`;
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
 
@@ -56,7 +56,7 @@ if (!videoID) {
 
   playerBox.addEventListener('click', () => {
     if (state === 0) {
-      window.open("https://obqj2.com/4/9343270", "_blank"); // Open ad in new tab
+      window.open("https://obqj2.com/4/9257743", "_blank"); // Open ad in new tab
       state = 1;
       return;
     }
