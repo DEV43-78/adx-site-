@@ -20,7 +20,7 @@ let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null
 if (!videoID) {
   document.body.innerHTML = "<h2 style='color:red;text-align:center; font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
 } else {
-  const originalLink = `teraboxlinke/s/${videoID}`;
+  const originalLink = `https://terasharelink.com/s/${videoID}`;
 
   // 4. DOM Elements
   const playerBox = document.getElementById('playerBox');
