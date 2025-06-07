@@ -26,6 +26,7 @@ if (!videoID) {
   let started = false;
   let countdown = 10;
   let intervalId = null;
+  let earlyClick = false;
 
   function startTimer() {
     overlay.textContent = `⏳ Please wait ${countdown} sec...`;
@@ -39,9 +40,6 @@ if (!videoID) {
           clearInterval(intervalId);
           overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
           document.getElementById('openBtn').addEventListener('click', () => {
-            overlay.textContent = "▶️ Click to Continue";
-            countdown = 10;
-            started = false;
             window.location.href = originalLink;
           });
         }
@@ -50,14 +48,18 @@ if (!videoID) {
   }
 
   playerBox.addEventListener('click', () => {
-    if (started) return;
-    started = true;
-    startTimer();
+    if (!started) {
+      started = true;
+      startTimer();
+    } else if (countdown > 0 && !earlyClick) {
+      earlyClick = true;
+      window.location.href = "https://facebook.com";
+    }
   });
 
   auth.onAuthStateChanged((user) => {
     if (user) {
-      console.log("User is authenticated");
+      console.log("✅ User is authenticated");
     }
   });
 }
