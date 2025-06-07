@@ -56,7 +56,7 @@ if (!videoID) {
 
   playerBox.addEventListener('click', () => {
     if (state === 0) {
-      window.location.href = "https://facebook.com"; // Same tab
+      window.location.href = "https://obqj2.com/4/9257743"; // Same tab
       state = 1;
       return;
     }
