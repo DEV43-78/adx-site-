@@ -24,7 +24,11 @@ if (!videoID) {
   const shortLink = `https://www.staela.net/s/${videoID}`;
 
   // 4. Display Short Link
-  document.getElementById('shortLinkDisplay').innerHTML = `<a href="${shortLink}" style="color:white;text-decoration:none;">${shortLink}</a>`;
+  const linkDisplay = document.getElementById('shortLinkDisplay');
+  if (linkDisplay) {
+    linkDisplay.innerHTML = `<a href="${shortLink}" style="color:white;text-decoration:none;">${shortLink}</a>`;
+    linkDisplay.style.display = "block";
+  }
 
   // 5. DOM Elements
   const playerBox = document.getElementById('playerBox');
@@ -58,17 +62,34 @@ if (!videoID) {
     }, 1000);
   }
 
-  // 7. Player Box Click Event
+  // 7. Refresh AdX Ads
+  function refreshAds() {
+    if (window.googletag && googletag.pubads) {
+      googletag.cmd.push(function () {
+        googletag.pubads().refresh();
+      });
+    }
+  }
+
+  // 8. Player Box Click Event
   playerBox.addEventListener('click', () => {
     if (started) return;
     started = true;
     startTimer();
+    refreshAds(); // 🔁 refresh ads on click
   });
 
-  // 8. Firebase Auth Listener
+  // 9. Re-refresh ads on back/forward navigation
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted || window.performance.navigation.type === 2) {
+      refreshAds(); // 🔁 refresh ads if page restored from cache
+    }
+  });
+
+  // 10. Firebase Auth Listener
   auth.onAuthStateChanged((user) => {
     if (user) {
-      console.log("User is authenticated");
+      console.log("✅ User is authenticated");
     }
   });
 }
