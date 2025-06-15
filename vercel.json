@@ -1,4 +1,6 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/s/:linkid",
@@ -8,13 +10,9 @@
       "source": "/k/:linkid",
       "destination": "/k/player.html"
     },
-
-    // 🔻 Alag se added video-post route
     {
       "source": "/video-post",
       "destination": "/video-post.html"
     }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+  ]
 }
