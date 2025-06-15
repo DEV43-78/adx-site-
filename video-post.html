@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Car Quiz</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+    }
+
+    .navbar {
+      background-color: #333;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 15px;
+    }
+
+    .page-info {
+      background-color: #fff;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .page-info h2 {
+      margin: 5px 0;
+      font-size: 20px;
+    }
+
+    .page-info p {
+      margin: 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .quiz-section, .result-section {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .question {
+      display: none;
+    }
+
+    .question.active {
+      display: block;
+    }
+
+    .question p {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    .btn {
+      margin-top: 15px;
+      padding: 10px 25px;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background-color: #555;
+    }
+
+    .result-section {
+      display: none;
+    }
+
+    .get-link {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .content {
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .footer {
+      background-color: #000;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .btn, .get-link {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      .navbar {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    🚗 Car Quiz Website
+  </div>
+
+  <div class="container">
+
+    <!-- Compact Page Info -->
+    <div class="page-info">
+      <h2>🚘 Car Quiz</h2>
+      <p>Answer just 2 questions to unlock your reward!</p>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-section">
+      <h2>Start Quiz</h2>
+
+      <div class="question active" id="q1">
+        <p>1. Which company manufactures the Fortuner?</p>
+        <label><input type="radio" name="q1"> Hyundai</label>
+        <label><input type="radio" name="q1"> Mahindra</label>
+        <label><input type="radio" name="q1"> Toyota</label>
+        <button class="btn" onclick="nextQuestion(1)">Next</button>
+      </div>
+
+      <div class="question" id="q2">
+        <p>2. Which is an electric car?</p>
+        <label><input type="radio" name="q2"> Tata Nexon EV</label>
+        <label><input type="radio" name="q2"> Hyundai i20</label>
+        <label><input type="radio" name="q2"> Maruti Alto</label>
+        <button class="btn" onclick="showFinal()">Submit</button>
+      </div>
+    </div>
+
+    <!-- Result Section -->
+    <div class="result-section" id="resultBox">
+      <h3>🎉 Great! You’ve completed the quiz.</h3>
+      <a class="get-link" href="https://example.com" target="_blank">➡️ Get Link</a>
+    </div>
+
+
+<div class="luxury-content" style="font-family: 'Segoe UI', sans-serif; line-height: 1.8; font-size: 16px; color: #333; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+
+  <h2 style="color:#1a1a1a;">🚗 Introduction to Luxury Cars</h2>
+  <p>Luxury cars are more than just a mode of transport—they are a statement of refinement, engineering excellence, and lifestyle sophistication. Built with premium materials, cutting-edge technology, and unmatched craftsmanship, these vehicles represent the top tier of the automotive world.</p>
+
+  <h2 style="color:#1a1a1a;">🏷️ Top Luxury Brands</h2>
+  <p>World-renowned luxury car brands include Rolls-Royce, Bentley, Mercedes-Benz, BMW, Audi, Lexus, Jaguar, Porsche, Maserati, and Aston Martin. These manufacturers blend legacy, innovation, and prestige to deliver automotive art.</p>
+
+  <h2 style="color:#1a1a1a;">🛋️ Interior Elegance</h2>
+  <p>Luxury car interiors feature hand-stitched leather, Alcantara, wood, aluminum, and carbon fiber. Every detail—from the dashboard to the floor mats—is curated for comfort and class. Features like ventilated massage seats, ambient lighting, and executive rear lounges are standard.</p>
+
+  <h2 style="color:#1a1a1a;">🔊 Sound & Silence</h2>
+  <p>High-end sound systems by Burmester, Bang & Olufsen, and Meridian deliver theater-like audio. At the same time, acoustic glass and sound-deadening insulation provide serene cabin quietness, even at high speeds.</p>
+
+  <h2 style="color:#1a1a1a;">⚙️ Power & Performance</h2>
+  <p>Luxury cars pack powerful engines: turbocharged V6s, V8s, or V12s, often tuned for a smooth ride rather than raw aggression. Hybrid and electric drivetrains now offer whisper-silent speed with instant torque.</p>
+
+  <h2 style="color:#1a1a1a;">🔌 Luxury Goes Electric</h2>
+  <p>Electric luxury cars like Tesla Model S Plaid, Lucid Air, Porsche Taycan, BMW i7, and Mercedes EQS redefine performance and eco-responsibility. Features include fast charging, long range, and AI-enhanced comfort.</p>
+
+  <h2 style="color:#1a1a1a;">🧠 Smart Technology</h2>
+  <p>From AI-based voice control to augmented reality HUDs, luxury cars integrate tech at every level. Facial recognition, fingerprint start, and over-the-air updates keep these cars modern and future-ready.</p>
+
+  <h2 style="color:#1a1a1a;">📱 Infotainment Innovation</h2>
+  <p>Multi-display dashboards, rear-seat entertainment, Apple CarPlay, Android Auto, and personalized profiles make luxury vehicles smarter and more enjoyable for all passengers.</p>
+
+  <h2 style="color:#1a1a1a;">🛡️ Safety & Assistance</h2>
+  <p>Features like adaptive cruise control, automatic emergency braking, blind spot monitoring, 360° cameras, night vision, and even autonomous driving ensure top-tier safety for all occupants.</p>
+
+  <h2 style="color:#1a1a1a;">🛞 Ride Comfort & Handling</h2>
+  <p>Advanced suspension systems (like air suspension or active dampers) adapt to road conditions in real time, offering a cloud-like ride. Rear-wheel steering and adaptive chassis control enhance agility.</p>
+
+  <h2 style="color:#1a1a1a;">🧳 Practical Luxury</h2>
+  <p>Despite being premium, luxury cars offer practical features: auto-opening tailgates, heated armrests, retractable tables, onboard refrigerators, umbrella holders, and even picnic sets in models like Rolls-Royce Cullinan.</p>
+
+  <h2 style="color:#1a1a1a;">🧵 Bespoke Customization</h2>
+  <p>Buyers can personalize everything: exterior color, rim designs, interior themes, embroidery, even ceiling starlights. Rolls-Royce and Bentley offer "Coachbuild" for truly one-of-a-kind creations.</p>
+
+  <h2 style="color:#1a1a1a;">💼 Business-Class Comfort</h2>
+  <p>Executive sedans like the Mercedes-Maybach S-Class offer rear business suites, complete with tablets, wireless charging, massage recliners, fold-out tables, and champagne chillers.</p>
+
+  <h2 style="color:#1a1a1a;">🚙 SUV Luxury Segment</h2>
+  <p>Luxury SUVs such as the Range Rover Autobiography, Rolls-Royce Cullinan, Bentley Bentayga, and Lamborghini Urus combine off-road capability with limousine-grade interiors.</p>
+
+  <h2 style="color:#1a1a1a;">🪄 Innovation Meets Tradition</h2>
+  <p>Luxury brands blend tradition and innovation. For example, the Bentley Continental GT retains hand-finished wood in a dashboard that also includes a rotating digital display panel.</p>
+
+  <h2 style="color:#1a1a1a;">🛫 Global Demand & Status</h2>
+  <p>Luxury cars are global symbols of wealth, power, and style. In cities like Dubai, London, Los Angeles, and Mumbai, they’re often used to make a personal or professional statement.</p>
+
+  <h2 style="color:#1a1a1a;">🌍 Sustainability in Luxury</h2>
+  <p>Premium brands are now adopting eco-materials like vegan leather, recycled plastics, and sustainable wood trims—proving that luxury can be responsible.</p>
+
+  <h2 style="color:#1a1a1a;">🧭 Autonomous Future</h2>
+  <p>Luxury is leading autonomy. Mercedes Drive Pilot and Tesla Autopilot aim for hands-free driving, while AI learns passenger preferences—from seating angle to temperature and music.</p>
+
+  <h2 style="color:#1a1a1a;">📈 Investment & Resale</h2>
+  <p>Rare and well-maintained luxury cars appreciate in value over time. Limited editions, custom builds, and historic models often become collector’s items.</p>
+
+  <h2 style="color:#1a1a1a;">🧑‍✈️ Chauffeur Experience</h2>
+  <p>Many luxury cars, especially long-wheelbase versions, are designed for chauffeured use. Rear seats often feature footrests, privacy blinds, and multimedia controls for ultimate comfort.</p>
+
+  <h2 style="color:#1a1a1a;">🎯 Conclusion: A Dream on Wheels</h2>
+  <p>A luxury car is more than just metal—it is a dream crafted into motion. From the hum of the engine to the softness of the seat, every part whispers sophistication. Whether you're behind the wheel or being driven, a luxury car transforms every journey into an experience of elegance and emotion.</p>
+
+</div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2025 Car Info Website | All rights reserved
+  </div>
+<script>
+// Clear any stored quiz progress when user reopens the page
+window.onload = function() {
+  localStorage.removeItem('quizProgress'); // if you were using it
+  sessionStorage.removeItem('quizProgress'); // just in case
+  // Optionally reset your quiz manually if stored in variables
+  if (typeof resetQuiz === 'function') {
+    resetQuiz(); // call your quiz reset function
+  }
+};
+</script>
+
+  <script>
+    function nextQuestion(current) {
+      document.getElementById(`q${current}`).classList.remove("active");
+      document.getElementById(`q${current + 1}`).classList.add("active");
+    }
+
+    function showFinal() {
+      document.querySelector(".quiz-section").style.display = "none";
+      document.getElementById("resultBox").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
