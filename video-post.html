@@ -285,28 +285,35 @@
     © 2025 Car Info Website | All rights reserved
   </div>
 <script>
-// Clear any stored quiz progress when user reopens the page
-window.onload = function() {
-  localStorage.removeItem('quizProgress'); // if you were using it
-  sessionStorage.removeItem('quizProgress'); // just in case
-  // Optionally reset your quiz manually if stored in variables
-  if (typeof resetQuiz === 'function') {
-    resetQuiz(); // call your quiz reset function
+  window.onload = function () {
+    localStorage.removeItem('quizProgress');
+    sessionStorage.removeItem('quizProgress');
+    if (typeof resetQuiz === 'function') {
+      resetQuiz();
+    }
+  };
+
+  function nextQuestion(current) {
+    document.getElementById(`q${current}`).classList.remove("active");
+    document.getElementById(`q${current + 1}`).classList.add("active");
+
+    // Refresh bottom ad when moving to next question
+    googletag.cmd.push(function () {
+      googletag.pubads().refresh([adSlotBottom]);
+    });
   }
-};
+
+  function showFinal() {
+    document.querySelector(".quiz-section").style.display = "none";
+    document.getElementById("resultBox").style.display = "block";
+
+    // Refresh bottom ad on result screen
+    googletag.cmd.push(function () {
+      googletag.pubads().refresh([adSlotBottom]);
+    });
+  }
 </script>
 
-  <script>
-    function nextQuestion(current) {
-      document.getElementById(`q${current}`).classList.remove("active");
-      document.getElementById(`q${current + 1}`).classList.add("active");
-    }
-
-    function showFinal() {
-      document.querySelector(".quiz-section").style.display = "none";
-      document.getElementById("resultBox").style.display = "block";
-    }
-  </script>
 
 </body>
 </html>
