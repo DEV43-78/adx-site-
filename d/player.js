@@ -23,27 +23,7 @@ if (!videoID) {
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
 
-  let state = 0; // 0 = first click to start countdown, 1 = countdown running, 2 = ready
-  let countdown = 10;
-  let intervalId = null;
-
-  function startCountdown() {
-    overlay.textContent = `⏳ Please wait ${countdown} sec...`;
-    intervalId = setInterval(() => {
-      if (document.visibilityState === "visible") {
-        countdown--;
-        overlay.textContent = `⏳ Please wait ${countdown} sec...`;
-        if (countdown <= 0) {
-          clearInterval(intervalId);
-          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
-          document.getElementById("openBtn").addEventListener("click", () => {
-            window.location.href = "https://www.staela.net/d1/player.html";
-          });
-          state = 2;
-        }
-      }
-    }, 1000);
-  }
+  let state = 0; // 0 = ready for first click, 1 = button shown
 
   function refreshAds() {
     if (window.googletag && googletag.pubads) {
@@ -55,7 +35,10 @@ if (!videoID) {
 
   playerBox.addEventListener('click', () => {
     if (state === 0) {
-      startCountdown();
+      overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+      document.getElementById("openBtn").addEventListener("click", () => {
+        window.location.href = "https://www.staela.net/d1/player.html";
+      });
       refreshAds();
       state = 1;
     }
