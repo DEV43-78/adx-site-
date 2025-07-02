@@ -1,4 +1,4 @@
-// Firebase Configuration
+// 1. Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
   authDomain: "link-shortner-6a2c1.firebaseapp.com",
@@ -12,12 +12,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// Extract Video ID from URL
+// 2. Extract Video ID from URL
 let pathSegments = window.location.pathname.split('/').filter(Boolean);
 let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
 
 if (!videoID) {
-  document.body.innerHTML = "<h2 style='color:red;text-align:center;font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
+  document.body.innerHTML = "<h2 style='color:red;text-align:center;font-weight:bold; margin-top:50px;'>❌ Invalid or Missing Video ID</h2>";
 } else {
 
   const playerBox = document.getElementById('playerBox');
@@ -25,28 +25,13 @@ if (!videoID) {
 
   let state = 0; // 0 = ready for first click, 1 = button shown
 
-  function refreshAds() {
-    if (window.googletag && googletag.pubads) {
-      googletag.cmd.push(function () {
-        googletag.pubads().refresh();
-      });
-    }
-  }
-
   playerBox.addEventListener('click', () => {
     if (state === 0) {
       overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
       document.getElementById("openBtn").addEventListener("click", () => {
-        window.location.href = "https://www.staela.net/d1/player.html";
+        window.location.href = `https://www.staela.net/d1/${videoID}`;
       });
-      refreshAds();
       state = 1;
-    }
-  });
-
-  window.addEventListener("pageshow", function (event) {
-    if (event.persisted || window.performance.navigation.type === 2) {
-      refreshAds();
     }
   });
 
