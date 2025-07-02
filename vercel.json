@@ -3,5 +3,6 @@
     { "source": "/s/:linkid", "destination": "/s/player.html" },
      { "source": "/k/:linkid", "destination": "/k/player.html" },
     { "source": "/d/:linkid", "destination": "/d/player.html" }
+    { "source": "/d1/:linkid", "destination": "/d1/player.html" }
   ]
 } 
