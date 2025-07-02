@@ -21,18 +21,9 @@ if (!videoID) {
 } else {
 
   const playerBox = document.getElementById('playerBox');
-  const overlay = document.getElementById('overlayText');
-
-  let state = 0; // 0 = ready for first click, 1 = button shown
 
   playerBox.addEventListener('click', () => {
-    if (state === 0) {
-      overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
-      document.getElementById("openBtn").addEventListener("click", () => {
-        window.location.href = `https://www.staela.net/d1/${videoID}`;
-      });
-      state = 1;
-    }
+    window.location.href = `https://www.staela.net/d1/${videoID}`;
   });
 
   auth.onAuthStateChanged((user) => {
