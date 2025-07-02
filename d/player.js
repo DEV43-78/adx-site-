@@ -1,4 +1,4 @@
-// 1. Firebase Configuration
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
   authDomain: "link-shortner-6a2c1.firebaseapp.com",
@@ -9,22 +9,21 @@ const firebaseConfig = {
   measurementId: "G-N4J4YQ125B"
 };
 
-// 2. Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// 3. Extract videoID from URL
+// Extract Video ID from URL
 let pathSegments = window.location.pathname.split('/').filter(Boolean);
 let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
 
 if (!videoID) {
   document.body.innerHTML = "<h2 style='color:red;text-align:center;font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
 } else {
-  const originalLink = `https://staela.net/s/${videoID}`;
+
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
 
-  let state = 0; // 0 = first click (start countdown), 1 = countdown running, 2 = ready
+  let state = 0; // 0 = first click to start countdown, 1 = countdown running, 2 = ready
   let countdown = 10;
   let intervalId = null;
 
@@ -38,7 +37,7 @@ if (!videoID) {
           clearInterval(intervalId);
           overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
           document.getElementById("openBtn").addEventListener("click", () => {
-            window.location.href = originalLink;
+            window.location.href = "https://www.staela.net/d1/player.html";
           });
           state = 2;
         }
