@@ -20,12 +20,12 @@ let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null
 if (!videoID) {
   document.body.innerHTML = "<h2 style='color:red;text-align:center;font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
 } else {
-  const originalLink = `https://https://www.staela.net/s/${videoID}`;
+  const originalLink = `https://https://1024terabox/s/${videoID}`;
   const playerBox = document.getElementById('playerBox');
   const overlay = document.getElementById('overlayText');
 
   let state = 0; // 0 = first click (open ad), 1 = countdown, 2 = ready
-  let countdown = 10;
+  let countdown = 3;
   let intervalId = null;
 
   function startCountdown() {
