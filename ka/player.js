@@ -56,7 +56,7 @@ if (!videoID) {
 
   playerBox.addEventListener('click', () => {
     if (state === 0) {
-      window.open("https://obqj2.com/4/9430467", "_blank"); // Open ad in new tab
+      window.open("https://obqj2.com/4/9380741", "_blank"); // Open ad in new tab
       state = 1;
       return;
     }
