@@ -6,12 +6,12 @@
   <title>🎥 Watch Video | Terabox Link</title>
 
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P70DH8GPKC"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N4J4YQ125B"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-P70DH8GPKC');
+    gtag('config', 'G-N4J4YQ125B');
   </script>
 
   <!-- ADX Ads -->
@@ -24,11 +24,6 @@
       googletag.enableServices();
     });
   </script>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -110,17 +105,6 @@
       text-align: center;
     }
 
-    .open-btn {
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #00bcd4, #009688);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
     section {
       max-width: 900px;
       padding: 24px;
@@ -145,8 +129,15 @@
       }
     }
 
-    #shortLinkDisplay {
-      display: none !important;
+    .open-btn {
+      padding: 10px 20px;
+      background: linear-gradient(to right, #00bcd4, #009688);
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -160,7 +151,7 @@
   <script> googletag.cmd.push(function() { googletag.display('div-gpt-ad-1751427859127-0'); }); </script>
 </div>
 
-<!-- Video Player -->
+<!-- Video Section -->
 <div class="player-container">
   <div class="player-box" id="playerBox">
     <img src="img/a1.jpg" alt="Video Thumbnail" />
@@ -173,15 +164,19 @@
   </div>
 </div>
 
-<!-- News Article -->
+<!-- Long News Article -->
 <section>
   <h2 style="color: var(--primary);">📡 भारत में 5G तकनीक: भविष्य की डिजिटल क्रांति</h2>
-  <p>भारत में 5G तकनीक ने एक नई डिजिटल क्रांति की शुरुआत की है...</p>
-  <p>यह तकनीक स्मार्ट शहरों, शिक्षा, खेती, स्वास्थ्य, और गेमिंग के क्षेत्र में व्यापक परिवर्तन ला रही है...</p>
-  <!-- Add more paragraph lines here to complete your 60-line content if needed -->
+  <p>5G तकनीक के साथ भारत में स्मार्टफोन यूज़र्स को पहले से कई गुना बेहतर स्पीड, कम लेटेंसी और नई तकनीकी सुविधाएं मिलने लगी हैं।</p>
+  <p>इस तकनीक के आने से शिक्षा, चिकित्सा, मनोरंजन और कृषि क्षेत्रों में भारी बदलाव देखने को मिल रहे हैं।</p>
+  <p>सरकार और प्राइवेट कंपनियाँ 5G के इंफ्रास्ट्रक्चर में तेज़ी से निवेश कर रही हैं ताकि देश का डिजिटल भविष्य और मजबूत हो सके।</p>
+  <p>5G नेटवर्क के साथ IoT आधारित डिवाइसेस, स्मार्ट ट्रैफिक, हेल्थ मॉनिटरिंग और हाई-क्वालिटी वर्चुअल क्लासेस अब संभव हो रही हैं।</p>
+  <p>यह तकनीक किसानों को मौसम की सटीक जानकारी, मिट्टी का विश्लेषण और स्मार्ट सिंचाई जैसी सेवाएं देने में मदद कर रही है।</p>
+  <p>5G पर आधारित स्मार्ट शहरों में ऑटोमैटिक ट्रैफिक कंट्रोल, CCTV इंटीग्रेशन और पब्लिक सेफ्टी सिस्टम लागू किए जा रहे हैं।</p>
+  <p>भारत का लक्ष्य है कि 2025 तक देश के 90% हिस्सों को 5G से जोड़ दिया जाए और "डिजिटल इंडिया" के लक्ष्य को तेजी से प्राप्त किया जाए।</p>
 </section>
 
-<!-- Instruction -->
+<!-- CTA -->
 <p style="text-align:center; color: #555;">⚠️ Tap the video player to start countdown, then open in app.</p>
 
 <!-- Footer -->
@@ -189,8 +184,7 @@
   © 2025 TeraboxLinke | <a href="#" style="color: var(--primary); text-decoration: none;">Privacy Policy</a>
 </footer>
 
-<!-- Link to player.js -->
-<script src="player.js"></script>
-
+<!-- Player Logic -->
+<script type="module" src="player.js"></script>
 </body>
 </html>
