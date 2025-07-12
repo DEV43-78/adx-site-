@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/al/:linkid", "destination": "/al/player.html" },
      { "source": "/dh/:linkid", "destination": "/dh/player.html" },
      { "source": "/ka/:linkid", "destination": "/ka/player.html" },
     { "source": "/a/:linkid", "destination": "/a/player.html" },
