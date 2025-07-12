@@ -2,7 +2,7 @@
   "rewrites": [
      { "source": "/dh/:linkid", "destination": "/s/player.html" },
      { "source": "/ka/:linkid", "destination": "/ka/player.html" },
-    { "source": "/a/:linkid", "destination": "/d/player.html" },
+    { "source": "/a/:linkid", "destination": "/a/player.html" },
    { "source": "/ma/:linkid", "destination": "/ma/player.html" },
     { "source": "/s/:linkid", "destination": "/s/player.html" },
      { "source": "/k/:linkid", "destination": "/k/player.html" },
