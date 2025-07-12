@@ -12,7 +12,7 @@ const firebaseConfig = {
   storageBucket: "link-shortner-6a2c1.appspot.com",
   messagingSenderId: "702481354050",
   appId: "1:702481354050:web:797dce2f2a1302f2590cdb",
-  measurementId: "G-N4J4YQ125B"
+  measurementId: "G-Y2FXRH6QVY"
 };
 
 // 2. Initialize Firebase
