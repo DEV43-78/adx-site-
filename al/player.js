@@ -1,71 +1,51 @@
-// player.js
+// Firebase SDKs
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getDatabase, ref, child, update, increment, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 
 // 1. Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyD3Xkm1DxO-swh1fBQ5CXWt77pmSP320c8",
   authDomain: "link-shortner-6a2c1.firebaseapp.com",
   projectId: "link-shortner-6a2c1",
+  databaseURL: "https://link-shortner-6a2c1-default-rtdb.asia-southeast1.firebasedatabase.app",
   storageBucket: "link-shortner-6a2c1.appspot.com",
   messagingSenderId: "702481354050",
   appId: "1:702481354050:web:797dce2f2a1302f2590cdb",
-  measurementId: "G-N4J4YQ125B",
-  databaseURL: "https://link-shortner-6a2c1-default-rtdb.asia-southeast1.firebasedatabase.app"
+  measurementId: "G-N4J4YQ125B"
 };
 
-// 2. Firebase Init
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+// 2. Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getDatabase(app);
 
-// 3. Get videoID from URL
+// 3. Extract Short ID
 let pathSegments = window.location.pathname.split('/').filter(Boolean);
-let videoID = pathSegments.length ? pathSegments[pathSegments.length - 1] : null;
+let shortID = pathSegments[pathSegments.length - 1] || null;
 
-// 4. UI Elements
-const playerBox = document.getElementById('playerBox');
-const overlay = document.getElementById('overlayText');
-
-if (!videoID) {
-  document.body.innerHTML = "<h2 style='color:red;text-align:center;font-weight:bold;'>❌ Invalid or Missing Video ID</h2>";
+if (!shortID) {
+  document.body.innerHTML = "<h2 style='color:red;text-align:center;'>❌ Invalid or Missing ID</h2>";
 } else {
-  const originalLink = `https://1024terabox.com/s/${videoID}`;
+  const finalRedirect = `https://staela.net/?v=${shortID}`;
+  const playerBox = document.getElementById('playerBox');
+  const overlay = document.getElementById('overlayText');
 
-  // State Management
   let state = 0;
   let countdown = 6;
   let intervalId = null;
 
-  // Save video link to Firebase (only once)
-  function saveVideoLink() {
-    const ref = db.ref(`videoStats/${videoID}`);
-    ref.once("value", (snap) => {
-      if (!snap.exists()) {
-        ref.set({
-          link: originalLink,
-          views: 0,
-          createdAt: new Date().toISOString()
-        });
-      }
-    });
-  }
+  // 4. Firebase Realtime DB log
+  const trackClickAndView = () => {
+    const linkRef = ref(db, `shortLinks/${shortID}`);
+    const updates = {
+      views: increment(1),
+      lastClicked: Date.now()
+    };
+    update(linkRef, updates);
+    logEvent(analytics, "link_clicked", { shortID: shortID });
+  };
 
-  // Increment view count
-  function recordView() {
-    const ref = db.ref(`videoStats/${videoID}/views`);
-    ref.transaction(current => (current || 0) + 1);
-  }
-
-  // Analytics event
-  function logAnalyticsClick() {
-    if (typeof gtag === "function") {
-      gtag('event', 'player_click', {
-        event_category: 'video',
-        event_label: videoID,
-        value: 1
-      });
-    }
-  }
-
-  // Countdown logic
   function startCountdown() {
     overlay.textContent = `⏳ Please wait ${countdown} sec...`;
     intervalId = setInterval(() => {
@@ -74,9 +54,10 @@ if (!videoID) {
         overlay.textContent = `⏳ Please wait ${countdown} sec...`;
         if (countdown <= 0) {
           clearInterval(intervalId);
-          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open in App</button>`;
+          overlay.innerHTML = `<button id="openBtn" class="open-btn">✅ Open Now</button>`;
           document.getElementById("openBtn").addEventListener("click", () => {
-            window.location.href = originalLink;
+            trackClickAndView();
+            window.location.href = finalRedirect;
           });
           state = 2;
         }
@@ -84,22 +65,16 @@ if (!videoID) {
     }, 1000);
   }
 
-  // Refresh ADX ads (optional)
   function refreshAds() {
     if (window.googletag && googletag.pubads) {
-      googletag.cmd.push(function () {
-        googletag.pubads().refresh();
-      });
+      googletag.cmd.push(() => googletag.pubads().refresh());
     }
   }
 
-  // 👆 Main Interaction
+  // 5. Player click handling
   playerBox.addEventListener('click', () => {
     if (state === 0) {
-      window.open("https://obqj2.com/4/9343270", "_blank"); // Open external ad
-      logAnalyticsClick();
-      recordView(); // Increment view count
-      saveVideoLink(); // Save video entry (once)
+      window.open("https://obqj2.com/4/9343270", "_blank");
       state = 1;
     } else if (state === 1) {
       startCountdown();
@@ -107,17 +82,13 @@ if (!videoID) {
     }
   });
 
-  // On browser back/forward
-  window.addEventListener("pageshow", function (event) {
-    if (event.persisted || window.performance.navigation.type === 2) {
-      refreshAds();
-    }
-  });
+  // 6. Count view immediately (on page open)
+  trackClickAndView();
 
-  // Optional: Firebase Auth check
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      console.log("✅ User authenticated:", user.email);
+  // Refresh on back
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted || window.performance.navigation.type === 2) {
+      refreshAds();
     }
   });
 }
